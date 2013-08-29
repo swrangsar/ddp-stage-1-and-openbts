@@ -226,7 +226,7 @@ def main_loop(tb):
 		    cursor.execute("update config set valuestring=? where keystring='GSM.Radio.C0'",t)
 		    conn.commit()
 		#start the OpenBTS
-		    f=os.popen('/home/swrangsar/ddp-stage-1-and-openbts/runOpenBTS.sh')
+		    f=os.popen('~/ddp-stage-1-and-openbts/runOpenBTS.sh')
 		    f.close()
 
 if __name__ == '__main__':

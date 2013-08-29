@@ -203,7 +203,7 @@ def main_loop(tb):
 		    n = 0
 		    power_temp = 10
 		    for i in range(200,size-217):
-			power = 0
+			power = 0                      
 			for j in range(0,17):
 			    power = power + avg_data[i+j]
 			#print sensed_freq[i+3],'\t', power
