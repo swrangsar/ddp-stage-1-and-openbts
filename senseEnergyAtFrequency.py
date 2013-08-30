@@ -12,6 +12,7 @@ import sys
 import math
 import struct
 import threading
+import time
 from datetime import datetime
 
 sys.stderr.write("Warning: this may have issues on some machines+Python version combinations to seg fault due to the callback in bin_statitics.\n\n")
@@ -203,12 +204,13 @@ def main_loop(tb):
 
         center_freq = m.center_freq
         power_db = 10*math.log10(m.data[0]/tb.usrp_rate)
-        power_threshold = -80
+        power_threshold = -70
 
         if (power_db > tb.squelch_threshold):
-            print datetime.now(), "center_freq", center_freq, "power_db", power_db
-            if (power_db > power.threshold):
-                print "The frequency", center_freq, "is already in use."
+            if (power_db > power_threshold):
+                print datetime.now(), "center_freq", center_freq, "power_db", power_db, "in use"
+            else:
+                print datetime.now(), "center_freq", center_freq, "power_db", power_db,
         
                 
 if __name__ == '__main__':
@@ -222,4 +224,3 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         pass
-                

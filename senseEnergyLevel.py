@@ -32,6 +32,7 @@ import sys
 import math
 import struct
 import threading
+import time
 from datetime import datetime
 
 sys.stderr.write("Warning: this may have issues on some machines+Python version combinations to seg fault due to the callback in bin_statitics.\n\n")
@@ -97,7 +98,7 @@ class my_top_block(gr.top_block):
     def __init__(self):
         gr.top_block.__init__(self)
 
-        usage = "usage: %prog [options] min_freq max_freq"
+        usage = "usage: %prog [options] channel_freq"
         parser = OptionParser(option_class=eng_option, usage=usage)
         parser.add_option("-a", "--args", type="string", default="",
                           help="UHD device device address args [default=%default]")
@@ -130,18 +131,15 @@ class my_top_block(gr.top_block):
                           help="Attempt to enable real-time scheduling")
 
         (options, args) = parser.parse_args()
-        if len(args) != 2:
+        if len(args) != 1:
             parser.print_help()
             sys.exit(1)
 
         self.channel_bandwidth = options.channel_bandwidth
 
-        self.min_freq = eng_notation.str_to_num(args[0])
-        self.max_freq = eng_notation.str_to_num(args[1])
+        self.channel_freq = eng_notation.str_to_num(args[0])
 
-        if self.min_freq > self.max_freq:
-            # swap them
-            self.min_freq, self.max_freq = self.max_freq, self.min_freq
+
 
         if not options.real_time:
             realtime = False
@@ -188,19 +186,6 @@ class my_top_block(gr.top_block):
 
         c2mag = blocks.complex_to_mag_squared(self.fft_size)
 
-        # FIXME the log10 primitive is dog slow
-        #log = blocks.nlog10_ff(10, self.fft_size,
-        #                       -20*math.log10(self.fft_size)-10*math.log10(power/self.fft_size))
-
-        # Set the freq_step to 75% of the actual data throughput.
-        # This allows us to discard the bins on both ends of the spectrum.
-
-        self.freq_step = self.nearest_freq((0.75 * self.usrp_rate), self.channel_bandwidth)
-        self.min_center_freq = self.min_freq + (self.freq_step/2) 
-        nsteps = math.ceil((self.max_freq - self.min_freq) / self.freq_step)
-        self.max_center_freq = self.min_center_freq + (nsteps * self.freq_step)
-
-        self.next_freq = self.min_center_freq
 
         tune_delay  = max(0, int(round(options.tune_delay * usrp_rate / self.fft_size)))  # in fft_frames
         dwell_delay = max(1, int(round(options.dwell_delay * usrp_rate / self.fft_size))) # in fft_frames
@@ -224,10 +209,8 @@ class my_top_block(gr.top_block):
         print "gain =", options.gain
 
     def set_next_freq(self):
-        target_freq = self.next_freq
-        self.next_freq = self.next_freq + self.freq_step
-        if self.next_freq >= self.max_center_freq:
-            self.next_freq = self.min_center_freq
+        target_freq = self.channel_freq
+
 
         if not self.set_freq(target_freq):
             print "Failed to set frequency to", target_freq
@@ -254,22 +237,10 @@ class my_top_block(gr.top_block):
     def set_gain(self, gain):
         self.u.set_gain(gain)
     
-    def nearest_freq(self, freq, channel_bandwidth):
-        freq = round(freq / channel_bandwidth, 0) * channel_bandwidth
-        return freq
+
 
 def main_loop(tb):
     
-    def bin_freq(i_bin, center_freq):
-        #hz_per_bin = tb.usrp_rate / tb.fft_size
-        freq = center_freq - (tb.usrp_rate / 2) + (tb.channel_bandwidth * i_bin)
-        #print "freq original:",freq
-        #freq = nearest_freq(freq, tb.channel_bandwidth)
-        #print "freq rounded:",freq
-        return freq
-    
-    bin_start = int(tb.fft_size * ((1 - 0.75) / 2))
-    bin_stop = int(tb.fft_size - bin_start)
 
     while 1:
 
@@ -282,16 +253,17 @@ def main_loop(tb):
         # m.raw_data is a string that contains the binary floats.
         # You could write this as binary to a file.
 
-        for i_bin in range(bin_start, bin_stop):
 
-            center_freq = m.center_freq
-            freq = bin_freq(i_bin, center_freq)
-            #noise_floor_db = -174 + 10*math.log10(tb.channel_bandwidth)
-            noise_floor_db = 10*math.log10(min(m.data)/tb.usrp_rate)
-            power_db = 10*math.log10(m.data[i_bin]/tb.usrp_rate) - noise_floor_db
 
-            if (power_db > tb.squelch_threshold) and (freq >= tb.min_freq) and (freq <= tb.max_freq):
-                print datetime.now(), "center_freq", center_freq, "freq", freq, "power_db", power_db, "noise_floor_db", noise_floor_db
+        center_freq = m.center_freq
+        power_db = 10*math.log10(m.data[0]/tb.usrp_rate)
+        power_threshold = -80
+
+        if (power_db > tb.squelch_threshold) and (power_db > power_threshold):
+            print datetime.now(), "center_freq", center_freq, "power_db", power_db, "in use"
+        else:
+            print datetime.now(), "center_freq", center_freq, "power_db", power_db            
+            
 
 if __name__ == '__main__':
     t = ThreadClass()
