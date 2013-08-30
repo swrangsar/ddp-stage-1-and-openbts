@@ -243,7 +243,9 @@ class my_top_block(gr.top_block):
 
 def main_loop(tb):
     
-
+    # use a counter to make sure power is less than threshold
+    lowPowerCount = 0
+    lowPowerCountMax = 10
     while 1:
 
         # Get the next message sent from the C++ code (blocking call).
@@ -263,10 +265,13 @@ def main_loop(tb):
 
         if (power_db > tb.squelch_threshold) and (power_db > power_threshold):
             print datetime.now(), "center_freq", center_freq, "power_db", power_db, "in use"
+            lowPowerCount = 0
         else:
             print datetime.now(), "center_freq", center_freq, "power_db", power_db
-            startOpenBTS(center_freq)
-            break
+            lowPowerCount += 1
+            if (lowPowerCount > lowPowerCountMax):
+                startOpenBTS(center_freq)
+                break
 
 
 def startOpenBTS(frequency):            
