@@ -33,6 +33,8 @@ import math
 import struct
 import threading
 import time
+import sqlite3
+import os
 from datetime import datetime
 
 sys.stderr.write("Warning: this may have issues on some machines+Python version combinations to seg fault due to the callback in bin_statitics.\n\n")
@@ -262,8 +264,25 @@ def main_loop(tb):
         if (power_db > tb.squelch_threshold) and (power_db > power_threshold):
             print datetime.now(), "center_freq", center_freq, "power_db", power_db, "in use"
         else:
-            print datetime.now(), "center_freq", center_freq, "power_db", power_db            
-            
+            print datetime.now(), "center_freq", center_freq, "power_db", power_db
+            startOpenBTS(center_freq)
+            break
+
+
+def startOpenBTS(frequency):            
+    
+    arfcn=int((frequency-935e6)/2e5)
+    print 'ARFCN=', arfcn
+    #DB modifications
+    t=(arfcn,)
+    conn=sqlite3.connect("/etc/OpenBTS/OpenBTS.db")
+    cursor=conn.cursor()
+    cursor.execute("update config set valuestring=? where keystring='GSM.Radio.C0'",t)
+    conn.commit()
+    #start the OpenBTS
+    f=os.popen('~/ddp-stage-1-and-openbts/runOpenBTS.sh')
+    f.close()
+	          
 
 if __name__ == '__main__':
     t = ThreadClass()
