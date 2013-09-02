@@ -19,11 +19,11 @@ def main_loop():
 #    (options, args) = parser.parse_args()
 #    if len(args) != 1:
 #        parser.print_help()
-    if len(sys.argv) != 1:
-        sys.exit(1)
+    if len(sys.argv) != 2:s
+#        sys.exit(1)
 
-    center_freq = eng_notation.str_to_num(argv[1])
-    print sys.argv[1]
+    center_freq = eng_notation.str_to_num(sys.argv[1])
+    print sys.argv[1], len(sys.argv)
 #    startOpenBTS(center_freq)
 
 def startOpenBTS(frequency):            
