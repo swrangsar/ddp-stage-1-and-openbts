@@ -1,2 +1,2 @@
-INSERT INTO sip_buddies (name, callerid, canreinvite, type, context, allow, host, dtmfmode, ipaddr, port, username) VALUES ('IMSI404929510095344', '3333', 'no', 'friend', 'sip-external', 'gsm', 'dynamic', 'info', '127.0.0.1', '5062', 'IMSI404929510095344');
-INSERT INTO dialdata_table (exten, dial) VALUES ('3333', 'IMSI404929510095344');
+INSERT INTO sip_buddies (name, callerid, canreinvite, type, context, allow, host, dtmfmode, ipaddr, port, username) VALUES ('IMSI404691100316269', '54321', 'no', 'friend', 'sip-external', 'gsm', 'dynamic', 'info', '127.0.0.1', '5062', 'IMSI404691100316269');
+INSERT INTO dialdata_table (exten, dial) VALUES ('54321', 'IMSI404691100316269');
