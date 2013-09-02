@@ -12,7 +12,7 @@ from datetime import datetime
 def main_loop():
     usage = "usage: %prog channel_freq"
     if len(sys.argv) != 2:
-        print 'usage: ', sys.argv[0], ' channel_freq'
+        print 'usage:', sys.argv[0], 'channel_freq'
         sys.exit(1)
 
     center_freq = eng_notation.str_to_num(sys.argv[1])
