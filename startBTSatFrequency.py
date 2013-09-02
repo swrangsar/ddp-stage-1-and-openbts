@@ -6,7 +6,7 @@ from gnuradio import gr, eng_notation
 import sys
 import math
 import struct
-import threading
+#import threading
 import time
 import sqlite3
 import os
@@ -19,12 +19,13 @@ def main_loop():
 #    (options, args) = parser.parse_args()
 #    if len(args) != 1:
 #        parser.print_help()
-    if len(sys.argv) != 2:s
-#        sys.exit(1)
+    if len(sys.argv) != 2:
+        print 'usage: ', sys.argv[0], ' channel_freq'
+        sys.exit(1)
 
     center_freq = eng_notation.str_to_num(sys.argv[1])
     print sys.argv[1], len(sys.argv)
-#    startOpenBTS(center_freq)
+    startOpenBTS(center_freq)
 
 def startOpenBTS(frequency):            
     
