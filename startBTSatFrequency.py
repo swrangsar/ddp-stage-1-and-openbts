@@ -2,9 +2,6 @@
 
 from gnuradio import eng_notation
 import sys
-#import math
-#import struct
-#import time
 import sqlite3
 import os
 from datetime import datetime
@@ -22,12 +19,14 @@ def startOpenBTS(frequency):
     
     arfcn=int((frequency-935e6)/2e5)
     print 'ARFCN=', arfcn
+    
     #DB modifications
     t=(arfcn,)
     conn=sqlite3.connect("/etc/OpenBTS/OpenBTS.db")
     cursor=conn.cursor()
     cursor.execute("update config set valuestring=? where keystring='GSM.Radio.C0'",t)
     conn.commit()
+    
     #start the OpenBTS
     f=os.popen('~/ddp-stage-1-and-openbts/runOpenBTS.sh')
     f.close()
