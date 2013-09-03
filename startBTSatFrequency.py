@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-from gnuradio import gr, eng_notation
+from gnuradio import eng_notation
 import sys
-import math
-import struct
-import time
+#import math
+#import struct
+#import time
 import sqlite3
 import os
 from datetime import datetime
