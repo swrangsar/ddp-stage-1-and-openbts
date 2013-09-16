@@ -12,8 +12,8 @@ cd ~/OpenBTS/openbts/trunk/apps/
 sudo gnome-terminal --tab -e "sudo ../../../smqueue/trunk/smqueue/smqueue" \
 	--tab -e "sudo ../../../subscriberRegistry/trunk/sipauthserve" &
 
-#sudo gnome-terminal -x sh -c "sudo ./OpenBTS" &
-#sudo gnome-terminal -x sh -c "sudo ./OpenBTSCLI" &
-sudo gnome-terminal --tab -e "sudo ./OpenBTS" \
-	--tab -e "sudo ./OpenBTSCLI" &
+sudo gnome-terminal -x sh -c "sudo ./OpenBTS" &
+sudo gnome-terminal -x sh -c "sudo ./OpenBTSCLI" &
+#sudo gnome-terminal --tab -e "sudo ./OpenBTS" \
+#	--tab -e "sudo ./OpenBTSCLI" &
 cd ~

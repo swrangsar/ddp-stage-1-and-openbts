@@ -295,8 +295,8 @@ def startOpenBTS(downFrequency):
     
     
     arfcn=int((downFrequency-935e6)/2e5)
-    if (arfcn < 0):
-        print "ARFCN must be > 0 !!!"
+    if (arfcn <= 974) or (arfcn >= 1024):
+        print "ARFCN must be > 974 adnd < 1024 !!!"
         sys.exit(1)
     print 'ARFCN=', arfcn
     #DB modifications
