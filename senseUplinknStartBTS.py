@@ -35,7 +35,7 @@ import threading
 import time
 import sqlite3
 import os
-import subprocess
+#import subprocess
 from datetime import datetime
 
 sys.stderr.write("Warning: this may have issues on some machines+Python version combinations to seg fault due to the callback in bin_statitics.\n\n")
