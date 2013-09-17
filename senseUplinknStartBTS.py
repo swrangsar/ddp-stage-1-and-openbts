@@ -305,11 +305,8 @@ def startOpenBTS(downFrequency):
     cursor=conn.cursor()
     cursor.execute("update config set valuestring=? where keystring='GSM.Radio.C0'",t)
     conn.commit()
+
     #start the OpenBTS
-    #f=os.popen('~/ddp-stage-1-and-openbts/runOpenBTS.sh')
-    #f.close()
-    #subprocess.Popen(['/home/swrangsar/ddp-stage-1-and-openbts/runOpenBTS.sh'])
-    #subprocess.Popen(['sudo', 'gnome-terminal', '--tab', '-e', 'sudo ./OpenBTS'], cwd='/home/swrangsar/OpenBTS/openbts/trunk/apps/')
     f=subprocess.Popen(os.path.expanduser('~/ddp-stage-1-and-openbts/runOpenBTS.sh'))
     f.wait()
 	          
