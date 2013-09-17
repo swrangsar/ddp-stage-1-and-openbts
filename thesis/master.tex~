@@ -1,0 +1,35 @@
+\documentclass[11pt]{book}
+\usepackage{amsmath} %Never write a paper without using amsmath for its many new commands
+\usepackage{amssymb} %Some extra symbols
+%\usepackage{makeidx} %If you want to generate an index, automatically
+\usepackage{graphicx} %If you want to include postscript graphics
+%\usepackage{mystyle} %Create your own file, mystyle.sty where you put all your own \newcommand statements, for example.
+
+%\includeonly{chaptr2} %If you just want to process chaptr2.tex
+
+
+\begin{document}
+
+\author{Swrangsar Basumatary}
+\title{How to Write a Book}
+\date{\today}
+
+\frontmatter
+\tableofcontents
+\include{preface}
+
+\mainmatter
+\include{chapter1}
+\include{chaptr2}
+\include{chaptr3}
+\include{chaptr4}
+\include{chaptr5}
+
+\backmatter
+\include{glossary}
+\include{notat}
+\bibliographystyle{amsalpha} %The style you want to use for references.
+\bibliography{mr,refs} %The files containing all the articles and books you ever referenced.
+%\printindex %Make an index AUTOMATICALLY
+
+\end{document}
