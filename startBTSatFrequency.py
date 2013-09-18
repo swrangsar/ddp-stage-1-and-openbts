@@ -31,7 +31,6 @@ def startOpenBTS(frequency):
     #start the OpenBTS
     f=os.popen('~/ddp-stage-1-and-openbts/runOpenBTS.sh')
     f.close()
-
 	          
 
 if __name__ == '__main__':
