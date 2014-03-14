@@ -1,3 +1,8 @@
+left u8
+right u2
+sensor u9
+
+
 left 80,79
 none 98,99
 right 78,78
